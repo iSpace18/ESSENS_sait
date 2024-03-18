@@ -1,25 +1,47 @@
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['ФИО'];
-    $dob = $_POST['Дата'];
-    $address = $_POST['Адрес'];
-    $email = $_POST['Почта'];
-    $phone = $_POST['Телефон'];
-
-    $to = "steamdavid2007@gmail.com";
-    $subject = "Новая заявка с формы";
-    $message = "Имя: $name\n";
-    $message .= "Дата рождения: $dob\n";
-    $message .= "Адрес: $address\n";
-    $message .= "Email: $email\n";
-    $message .= "Телефон: $phone\n";
-
-    $headers = "From: your_email@example.com";
-
-    if (mail($to, $subject, $message, $headers)) {
-        echo "Данные успешно отправлены.";
-    } else {
-        echo "Ошибка при отправке данных.";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Success</title>
+</head>
+<body>
+    <?php
+    // Function to validate and sanitize form data
+    function clean_input($data) {
+      $data = trim($data);
+      $data = stripslashes($data);
+      $data = htmlspecialchars($data);
+      return $data;
     }
-}
-?>
+
+    // Get form data
+    $name = clean_input($_POST["ФИО"]);
+    $birthdate = clean_input($_POST["Дата"]);
+    $address = clean_input($_POST["Адрес"]);
+    $email = clean_input($_POST["Почта"]);
+    $phone = clean_input($_POST["Телефон"]);
+
+    // Set recipient email address
+    $recipient = "steamdavid2007@gmail.com";
+
+    // Set email subject
+    $subject = "New Registration";
+
+    // Build the email content
+    $email_content = "New registration:\n\n";
+    $email_content .= "Name: {$name}\n";
+    $email_content .= "Birthdate: {$birthdate}\n";
+    $email_content .= "Address: {$address}\n";
+    $email_content .= "Email: {$email}\n";
+    $email_content .= "Phone: {$phone}\n";
+
+    // Send the email
+    if (mail($recipient, $subject, $email_content)) {
+        echo "Спасибо! Ваше сообщение отправлено.";
+    } else {
+        echo "Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз.";
+    }
+    ?>
+</body>
+</html>
